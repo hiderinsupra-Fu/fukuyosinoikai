@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍻 飲み会のお知らせ！福よし岩見沢店</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --flame: #FF4500;
+    --gold: #FFD700;
+    --amber: #FF8C00;
+    --dark: #1a0a00;
+    --smoke: #2d1a0a;
+    --cream: #FFF8E7;
+    --accent: #FF6B35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 背景の炎エフェクト */
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 300px;
+    background: radial-gradient(ellipse at center bottom, rgba(255,69,0,0.3) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: fireGlow 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes fireGlow {
+    from { opacity: 0.5; transform: scaleX(0.95); }
+    to   { opacity: 1;   transform: scaleX(1.05); }
+  }
+
+  /* 煙のパーティクル */
+  .smoke-container {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .smoke {
+    position: absolute;
+    bottom: 0;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,200,100,0.7);
+    border-radius: 50%;
+    animation: rise linear infinite;
+  }
+
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-600px) scale(4) translateX(calc(var(--drift) * 1px)); opacity: 0; }
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* ヘッダー */
+  .header {
+    text-align: center;
+    padding: 50px 20px 30px;
+    position: relative;
+  }
+
+  .badge-new {
+    display: inline-block;
+    background: var(--flame);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 900;
+    padding: 4px 16px;
+    border-radius: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,69,0,0.7); }
+    50%       { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,69,0,0); }
+  }
+
+  .main-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: clamp(2.8rem, 12vw, 5rem);
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--amber) 50%, var(--flame) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 8px rgba(255,140,0,0.5));
+    animation: titleShake 8s ease-in-out infinite;
+  }
+
+  @keyframes titleShake {
+    0%, 90%, 100% { transform: rotate(0deg); }
+    92% { transform: rotate(-1deg); }
+    94% { transform: rotate(1.5deg); }
+    96% { transform: rotate(-0.5deg); }
+    98% { transform: rotate(1deg); }
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-top: 12px;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+
+  .emoji-row {
+    font-size: 2rem;
+    margin: 16px 0;
+    animation: bounce 1s ease-in-out infinite alternate;
+    display: block;
+  }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+  }
+
+  /* カウントダウン */
+  .countdown-card {
+    background: linear-gradient(135deg, var(--flame), var(--amber));
+    border-radius: 20px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(255,69,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .countdown-card::before {
+    content: '🔥';
+    position: absolute;
+    font-size: 6rem;
+    opacity: 0.1;
+    top: -10px; right: -10px;
+    animation: spin 10s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .countdown-label {
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .countdown-num {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 4rem;
+    line-height: 1;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .countdown-sub {
+    font-size: 1rem;
+    margin-top: 6px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* 情報カード群 */
+  .info-grid {
+    display: grid;
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .info-card {
+    background: var(--smoke);
+    border: 1px solid rgba(255,140,0,0.3);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), var(--flame));
+    border-radius: 4px 0 0 4px;
+  }
+
+  .info-card:hover {
+    transform: translateX(6px);
+    box-shadow: -6px 0 20px rgba(255,140,0,0.2);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(255,140,0,0.5));
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--amber);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .card-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .card-sub {
+    font-size: 0.8rem;
+    color: rgba(255,248,231,0.6);
+    margin-top: 4px;
+  }
+
+  /* 料金ハイライト */
+  .price-highlight {
+    background: linear-gradient(135deg, #1a0a00, #3d1f00);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .price-highlight::before {
+    content: '💰';
+    position: absolute;
+    top: -18px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  }
+
+  .price-label {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: var(--amber);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .price-amount {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .price-per {
+    font-size: 1rem;
+    color: rgba(255,248,231,0.7);
+    margin-top: 6px;
+  }
+
+  .price-total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,215,0,0.3);
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* コース説明 */
+  .course-box {
+    background: linear-gradient(135deg, rgba(255,69,0,0.15), rgba(255,140,0,0.1));
+    border: 1px solid rgba(255,140,0,0.4);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 16px 0;
+    text-align: center;
+  }
+
+  .course-title-tag {
+    display: inline-block;
+    background: var(--flame);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 900;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .course-name {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .course-desc {
+    font-size: 0.95rem;
+    color: rgba(255,248,231,0.85);
+    line-height: 1.7;
+  }
+
+  .course-time {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(255,215,0,0.15);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* 要望バッジ */
+  .request-box {
+    background: rgba(255,69,0,0.1);
+    border: 1px dashed var(--flame);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* ポイント情報 */
+  .point-box {
+    background: var(--smoke);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-size: 0.85rem;
+    color: rgba(255,248,231,0.7);
+    line-height: 1.8;
+    border-left: 3px solid var(--amber);
+  }
+
+  .point-highlight {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  /* CTAボタン */
+  .cta-section {
+    text-align: center;
+    padding: 32px 0 20px;
+  }
+
+  .cta-text {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: clamp(1.6rem, 6vw, 2.5rem);
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .cta-sub {
+    font-size: 1rem;
+    color: rgba(255,248,231,0.6);
+    margin-bottom: 24px;
+  }
+
+  .attend-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--flame), var(--amber));
+    color: white;
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.3rem;
+    padding: 16px 48px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(255,69,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 2px;
+    animation: ctaPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(255,69,0,0.5); }
+    50%       { box-shadow: 0 8px 40px rgba(255,69,0,0.8), 0 0 60px rgba(255,140,0,0.3); }
+  }
+
+  .attend-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 40px rgba(255,69,0,0.7);
+  }
+
+  /* 仕切り */
+  .divider {
+    text-align: center;
+    margin: 24px 0;
+    color: rgba(255,140,0,0.5);
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+  }
+
+  /* フッター */
+  .footer {
+    text-align: center;
+    padding: 24px 0 40px;
+    font-size: 0.75rem;
+    color: rgba(255,248,231,0.3);
+    line-height: 2;
+  }
+
+  /* セクションタイトル */
+  .section-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.1rem;
+    color: var(--amber);
+    letter-spacing: 2px;
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,140,0,0.4), transparent);
+  }
+
+  /* メンバータグ */
+  .member-tag {
+    display: inline-block;
+    background: rgba(255,140,0,0.15);
+    border: 1px solid rgba(255,140,0,0.5);
+    color: var(--cream);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .member-tag:hover {
+    transform: scale(1.1);
+    background: rgba(255,140,0,0.35);
+  }
+  .member-tag.star {
+    background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,140,0,0.2));
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 480px) {
+    .price-amount { font-size: 2.8rem; }
+    .main-title { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 煙パーティクル -->
+<div class="smoke-container" id="smokeContainer"></div>
+
+<div class="wrapper">
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="badge-new">🔥 INVITATION</div>
+    <div class="main-title">飲もうぜ！！</div>
+    <span class="emoji-row">🍺🍗🍺🔥🍺🍗🍺</span>
+    <div class="subtitle">来週土曜日・みんな空けといて！</div>
+  </div>
+
+  <!-- カウントダウン -->
+  <div class="countdown-card">
+    <div class="countdown-label">🗓 開催まであと</div>
+    <div class="countdown-num" id="countdown">--</div>
+    <div class="countdown-sub">2026年4月25日（土）18:30 スタート！</div>
+  </div>
+
+  <!-- 店舗情報 -->
+  <div class="section-title">📍 お店情報</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="card-icon">🏮</div>
+      <div>
+        <div class="card-label">RESTAURANT</div>
+        <div class="card-value">元祖美唄やきとり 福よし 岩見沢店</div>
+        <div class="card-sub">📞 0126-22-2944</div>
+        <div class="card-sub">📍 北海道岩見沢市2条西3丁目1-1 2・3ビル1階</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-icon">⏰</div>
+      <div>
+        <div class="card-label">DATE & TIME</div>
+        <div class="card-value">2026年4月25日（土）18時30分</div>
+        <div class="card-sub">遅刻したら一気飲みで罰ゲーム（冗談）</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-icon">👥</div>
+      <div>
+        <div class="card-label">MEMBERS — 8名</div>
+        <div class="card-value" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+          <span class="member-tag">落合</span>
+          <span class="member-tag">古川</span>
+          <span class="member-tag">高嶌</span>
+          <span class="member-tag">村瀬</span>
+          <span class="member-tag">藤崎</span>
+          <span class="member-tag">尾方</span>
+          <span class="member-tag">原田</span>
+          <span class="member-tag star">もっくん ⭐</span>
+        </div>
+        <div class="card-sub" style="margin-top:8px;">予約番号：RAV002803</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- コース内容 -->
+  <div class="section-title">🍗 コース内容</div>
+  <div class="course-box">
+    <div class="course-title-tag">お手軽宴会コース</div>
+    <div class="course-name">全7品！！</div>
+    <div class="course-desc">
+      🔥 焼き鳥も<strong>ザンギ</strong>も食べられる♪<br>
+      美唄発祥の美味いやつ、全部入り！<br>
+      腹ペコで来い！！
+    </div>
+    <div class="course-time">⏱ 150分 たっぷり飲み放題</div>
+  </div>
+
+  <!-- ご要望 -->
+  <div class="request-box">
+    <span>🌶️</span>
+    <span><strong>鍋は発酵キムチでお願いします</strong>（辛いの好きな人集まれ！）</span>
+  </div>
+  <div class="request-box">
+    <span>🪑</span>
+    <span><strong>掘りごたつ席</strong>確保済み！足伸ばしてリラックスしろ！</span>
+  </div>
+
+  <div class="divider">・・・🔥・・・</div>
+
+  <!-- 料金 -->
+  <div class="price-highlight">
+    <div class="price-label">お一人様 料金（税込）</div>
+    <div class="price-amount">¥5,500</div>
+    <div class="price-per">コース料金（税込）</div>
+    <div class="price-total">8名合計 ¥44,000</div>
+  </div>
+
+  <!-- ポイント情報 -->
+  <div class="point-box">
+    🎁 <span class="point-highlight">Pontaポイント 400pt</span> ゲットできる！<br>
+    （50pt × 8名分）来店から6〜10日後に加算予定
+  </div>
+
+  <div class="divider">・・・🍺・・・</div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-text">絶対来いよな！！🔥</div>
+    <div class="cta-sub">欠席したら一生後悔するやつ</div>
+    <button class="attend-btn" onclick="handleAttend()">🙋 参加するぜ！！</button>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer">
+    元祖美唄やきとり 福よし 岩見沢店<br>
+    2026年4月25日（土）18:30〜<br>
+    予約番号 RAV002803
+  </div>
+
+</div>
+
+<script>
+  // 煙パーティクル生成
+  const container = document.getElementById('smokeContainer');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'smoke';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.bottom = Math.random() * 20 + '%';
+    p.style.animationDuration = (4 + Math.random() * 6) + 's';
+    p.style.animationDelay = (Math.random() * 5) + 's';
+    p.style.setProperty('--drift', (Math.random() * 80 - 40).toString());
+    p.style.opacity = (0.3 + Math.random() * 0.7).toString();
+    container.appendChild(p);
+  }
+
+  // カウントダウン
+  function updateCountdown() {
+    const target = new Date('2026-04-25T18:30:00');
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('countdown').textContent = '今日だ！！🎉';
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById('countdown').textContent =
+      days + '日 ' + hours + '時間 ' + mins + '分';
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+  // 参加ボタン
+  function handleAttend() {
+    const btn = document.querySelector('.attend-btn');
+    btn.textContent = '🎉 よっしゃ！待ってるぜ！！';
+    btn.style.background = 'linear-gradient(135deg, #228B22, #32CD32)';
+    btn.style.animation = 'none';
+    btn.style.boxShadow = '0 8px 32px rgba(50,205,50,0.5)';
+  }
+</script>
+
+</body>
+</html>
